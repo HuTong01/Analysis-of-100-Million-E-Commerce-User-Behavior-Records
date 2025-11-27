@@ -60,6 +60,7 @@ select * from user_behavior limit 5;
 --check outliers
 select max(datetimes),min(datetimes) from user_behavior;
 delete from user_behavior where datetimes < '2017-11-25 00:00:00' or datetimes > '2017-12-03 23:59:59';
+delete from user_behavior where dates is null;
 
 desc user_behavior;
 select * from user_behavior limit 5;
