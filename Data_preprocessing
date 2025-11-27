@@ -37,7 +37,7 @@ having count(*)>1;
 where user_behavior.user_id = t2.user_id
 and user_behavior.item_id = t2.item_id
 and user_behavior.ts = t2.ts
-and user_behavior.id > t2.id
+and user_behavior.id > t2.id;
 
 
 --create:date time hour
