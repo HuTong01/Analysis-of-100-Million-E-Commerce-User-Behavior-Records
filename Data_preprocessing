@@ -43,7 +43,7 @@ and user_behavior.id > t2.id;
 --create:date time hour
 --alter buffer value
 show variables like '%_buffer%';
-set global innodb_buffer_size = 10700000000;
+set global innodb_buffer_pool_size = 10700000000;
 show variables like '%_buffer%';
 --datetime
 alter table user_behavior add datetimes timestamp(0);
