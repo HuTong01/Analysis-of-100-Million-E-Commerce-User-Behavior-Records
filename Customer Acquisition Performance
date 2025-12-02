@@ -25,7 +25,7 @@ UV int(9),
 PUV decimal(10,1)
 );
 
-insert into ca select dates,count(*) as 'PV'，count(distinct user_id) as 'UV'，round(count(*)/count(distinct user_id),1) as 'PV/UV' from user_behavior where behavior_type = 'pv' group by dates; 
+insert into ca select dates,count(*) as 'PV',count(distinct user_id) as 'UV',round(count(*)/count(distinct user_id),1) as 'PV/UV' from user_behavior where behavior_type = 'pv' group by dates; 
 select * from ca;
 
 --delete from ca where dates is null;
