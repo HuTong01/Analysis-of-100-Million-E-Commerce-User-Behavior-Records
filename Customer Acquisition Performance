@@ -15,7 +15,7 @@ select dates,count(distinct user_id) as 'UV' from tmp where behavior_type = 'pv'
 
 --Pages per Session
 --PV/UV
-select dates,count(*) as 'PV'，count(distinct user_id) as 'UV'，round(count(*)/count(distinct user_id),1) as 'PV/UV' from tmp where behavior_type = 'pv' group by dates; 
+select dates,count(*) as 'PV',count(distinct user_id) as 'UV',round(count(*)/count(distinct user_id),1) as 'PV/UV' from tmp where behavior_type = 'pv' group by dates; 
 
 --process true data
 create table ca(
