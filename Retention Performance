@@ -15,9 +15,33 @@ group by
 order by 
   a.register_day;
 
+create table retention_rate (
+register_date char(10),
+remain_1 float,
+remain_3 float
+);
 
---Bounce 
---Bounce people 
-select count(*) from (select user_id from user_behavior group by user_id having count(behavior_type) = 1) t
+insert into retention_rate 
+select 
+  a.register_day,
+  count(distinct a.user_id) as new_user,
+  count(distinct if(datediff(b.dates,a.register_day) = 1,a.user_id,null))/count(distinct a.user_id)*100 as remain_1,
+  count(distinct if(datediff(b.dates,a.register_day) = 3,a.user_id,null))/count(distinct a.user_id)*100 as remain_3
+from 
+  (select user_id,min(dates) as register_day from user_behavior group by user_id) a
+left join
+  user_behavior b
+on
+  a.user_id = b.user_id and b.dates > a.register_day 
+group by
+  a.register_day; 
 
---Bounce rate = Bounce people /
+select * from retention_rate;
+
+
+--Bounce Rate = Bounce Sessions / Total Sessions
+--Bounce Sessions 
+select count(*) from (select user_id from user_behavior group by user_id having count(behavior_type) = 1);
+
+--Total Sessions
+select sun(pv) from ca;
