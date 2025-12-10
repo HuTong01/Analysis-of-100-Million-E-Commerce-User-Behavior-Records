@@ -1,0 +1,21 @@
+--user number
+select behavior_type,
+count(distinct user_id) as user_num
+from tmp
+group by behavior_type
+order by behavior_type desc;
+
+--save 
+create table behavior_user_num(
+behavior_type varchar(5),
+user_num int
+);
+
+iunsert into behavior_user_num 
+select behavior_type,
+count(distinct user_id) as user_num
+from user_behavior
+group by behavior_type
+order by behavior_type desc;
+
+select * from behavior_user_num;
