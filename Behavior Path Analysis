@@ -1,0 +1,75 @@
+--
+create view user_behavior_view as 
+select user_id,item_id,
+count(if(behavior_type = 'pv',behavior_type,null)) 'pv',
+count(if(behavior_type = 'fav',behavior_type,null)) 'fav',
+count(if(behavior_type = 'cart',behavior_type,null)) 'cart',
+count(if(behavior_type = 'buy',behavior_type,null)) 'buy'
+from user_behavior
+group by user_id,item_id
+
+
+--User Behavior Standardization
+create view user_behavior_standard as
+select user_id,item_id,(case when pv>0 then 1 else 0 end) '浏览',
+select user_id,item_id,(case when favv>0 then 1 else 0 end) '收藏',
+select user_id,item_id,(case when cart>0 then 1 else 0 end) '加购',
+select user_id,item_id,(case when buy>0 then 1 else 0 end) '购买'
+from user_behavior_view
+
+--path type
+create view user_behavior_path as 
+select *,concat(浏览,收藏,加购,购买) path_type
+from user_behavior_type as a
+where a.购买>0;
+
+--buy count
+create view path_count as 
+select path_type,count(*) as number
+from user_behavior_path
+group by path_count
+order by number desc;
+
+--translate
+create table trans(
+path_type char(4),
+description varchar(40));
+
+insert into trans
+values('0001','直接购买'),
+('1001','浏览购买'),
+('0011','加购购买'),
+('1011','浏览加购购买'),
+('0101','收藏购买'),
+('1101','浏览收藏购买'),
+('0111','收藏加购购买'),
+('1111','浏览收藏加购购买');
+
+select * from trans;
+
+select * from path_counr p
+join trans t
+on p.path_type = t.path_type
+order by number desc;
+
+--save
+create table pth_result(
+path_type cha(4),
+description varchar(40),
+num int);
+
+insert into path_result
+select path_type,description,number from
+path_counr p
+join trans t
+on p.path_type = t.path_type
+order by number desc;
+
+select * from path_result;
+
+select sum(buy) from user_behavior_view where buy>0 and fav=0 and cart=0;
+
+--计算收藏加购购买量的方法:全体购买量-从未收藏加购的购买量(当成只浏览了的购买行为)
+select 2015807-1528016;
+
+select 487791/(2888255+5530446);
